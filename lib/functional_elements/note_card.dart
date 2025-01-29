@@ -2,15 +2,22 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:notepade_3/one_note.dart';
+import 'package:notepade_3/functional_elements/one_note.dart';
+import 'package:notepade_3/models/note_model.dart';
 
 class NoteCard extends StatelessWidget {
-  final String text;
+  /*final String name;
+  final String mainPart;
+  final String date;*/
 
-  const NoteCard({
-    super.key,
-    required this.text,
-  });
+  final NoteModel model;
+
+  const NoteCard({super.key, required this.model});
+
+  Color getRandColor() {
+    return Color.fromRGBO(Random().nextInt(255), Random().nextInt(255),
+        Random().nextInt(255), 0.463);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +28,10 @@ class NoteCard extends StatelessWidget {
         color: Theme.of(context).colorScheme.primaryContainer,
         child: InkWell(
           onTap: () {
-            Navigator.push(context, _createRoute());
+            Navigator.push(context, _createRoute(model: model));
           },
           splashColor: Color.fromRGBO(0, 157, 255, 0.615),
-          hoverColor: Color.fromRGBO(Random().nextInt(255),
-              Random().nextInt(255), Random().nextInt(255), 0.463),
+          hoverColor: getRandColor(),
           hoverDuration: Duration(seconds: 1),
           borderRadius: BorderRadius.circular(15),
           child: Padding(
@@ -34,15 +40,26 @@ class NoteCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Data",
+                  model.headerPart == null ? "new" : model.headerPart!,
                   style: GoogleFonts.robotoSlab(fontSize: 22),
                 ),
                 Text(
-                  text,
+                  model.mainPart == null ? "write new text" : model.mainPart!,
                   style: GoogleFonts.robotoSlab(
                       fontSize: 15,
                       color: const Color.fromARGB(255, 184, 208, 219)),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(
+                    model.createAt == null
+                        ? "now date"
+                        : model.createAt.toString(),
+                    style: GoogleFonts.robotoSlab(
+                        fontSize: 15,
+                        color: const Color.fromARGB(255, 240, 244, 246)),
+                  ),
+                )
               ],
             ),
           ),
@@ -52,9 +69,11 @@ class NoteCard extends StatelessWidget {
   }
 }
 
-Route _createRoute() {
+Route _createRoute({required NoteModel model}) {
   return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => OneNote(),
+    pageBuilder: (context, animation, secondaryAnimation) => OneNote(
+      model: model,
+    ),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(1, 0);
       const end = Offset.zero;

@@ -2,13 +2,17 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:notepade_3/dto/note_list.dart';
+import 'package:notepade_3/models/note_model.dart';
 
 // ignore: must_be_immutable
 class OneNote extends StatelessWidget {
+  final NoteModel model;
+
   Color col = Color.fromRGBO(
       Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 0.4);
 
-  OneNote({super.key});
+  OneNote({super.key, required this.model});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +51,9 @@ class OneNote extends StatelessWidget {
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       label: Text(
-                        "Heading",
+                        model.headerPart == null
+                            ? "Go Write!"
+                            : model.headerPart!,
                         style: GoogleFonts.robotoSlab(),
                       ))),
               Expanded(
@@ -60,7 +66,9 @@ class OneNote extends StatelessWidget {
                         floatingLabelAlignment: FloatingLabelAlignment.start,
                         border: OutlineInputBorder(),
                         label: Text(
-                          "Main",
+                          model.mainPart == null
+                              ? "Go Write!"
+                              : model.mainPart!,
                           style: GoogleFonts.robotoSlab(),
                         ))),
               ),
@@ -70,5 +78,11 @@ class OneNote extends StatelessWidget {
         ),
       )),
     );
+  }
+
+  void newData() async {
+    NoteList dto = NoteList();
+
+    await dto.init();
   }
 }
