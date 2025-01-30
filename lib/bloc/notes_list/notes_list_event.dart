@@ -4,3 +4,5 @@ part of 'notes_list_bloc.dart';
 sealed class NotesListEvent {}
 
 class NotesListLoad extends NotesListEvent {}
+
+class NotesListAddNew extends NotesListEvent {}

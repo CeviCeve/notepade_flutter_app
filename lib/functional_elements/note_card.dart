@@ -15,24 +15,28 @@ class NoteCard extends StatelessWidget {
   const NoteCard({super.key, required this.model});
 
   Color getRandColor() {
-    return Color.fromRGBO(Random().nextInt(255), Random().nextInt(255),
-        Random().nextInt(255), 0.463);
+    return Color.fromRGBO(
+      Random().nextInt(255),
+      Random().nextInt(255),
+      Random().nextInt(255),
+      0.463,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       //width: (Random().nextInt(5) + 2) * 50,
-      constraints: BoxConstraints(maxWidth: 400),
+      constraints: const BoxConstraints(maxWidth: 400),
       child: Card(
         color: Theme.of(context).colorScheme.primaryContainer,
         child: InkWell(
           onTap: () {
             Navigator.push(context, _createRoute(model: model));
           },
-          splashColor: Color.fromRGBO(0, 157, 255, 0.615),
+          splashColor: const Color.fromRGBO(0, 157, 255, 0.615),
           hoverColor: getRandColor(),
-          hoverDuration: Duration(seconds: 1),
+          hoverDuration: const Duration(seconds: 1),
           borderRadius: BorderRadius.circular(15),
           child: Padding(
             padding: const EdgeInsets.all(18.0),
@@ -46,20 +50,23 @@ class NoteCard extends StatelessWidget {
                 Text(
                   model.mainPart == null ? "write new text" : model.mainPart!,
                   style: GoogleFonts.robotoSlab(
-                      fontSize: 15,
-                      color: const Color.fromARGB(255, 184, 208, 219)),
+                    fontSize: 15,
+                    color: const Color.fromARGB(255, 184, 208, 219),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: Text(
+                    // ignore: unnecessary_null_comparison
                     model.createAt == null
                         ? "now date"
                         : model.createAt.toString(),
                     style: GoogleFonts.robotoSlab(
-                        fontSize: 15,
-                        color: const Color.fromARGB(255, 240, 244, 246)),
+                      fontSize: 15,
+                      color: const Color.fromARGB(255, 240, 244, 246),
+                    ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -79,7 +86,8 @@ Route _createRoute({required NoteModel model}) {
       const end = Offset.zero;
       const curve = Curves.ease;
 
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      final tween =
+          Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
       return SlideTransition(
         position: animation.drive(tween),

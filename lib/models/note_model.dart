@@ -11,8 +11,9 @@ class NoteModel extends HiveObject {
   @HiveField(2)
   final DateTime createAt;
 
-  NoteModel(
-      {required this.headerPart,
-      required this.mainPart,
-      required this.createAt});
+  NoteModel({
+    required this.headerPart,
+    required this.mainPart,
+    required this.createAt,
+  });
 }

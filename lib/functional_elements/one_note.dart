@@ -2,17 +2,26 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:notepade_3/dto/note_list.dart';
 import 'package:notepade_3/models/note_model.dart';
 
 // ignore: must_be_immutable
 class OneNote extends StatelessWidget {
   final NoteModel model;
 
-  Color col = Color.fromRGBO(
-      Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 0.4);
+  late String mainPart;
+  late String headerPart;
 
-  OneNote({super.key, required this.model});
+  Color col = Color.fromRGBO(
+    Random().nextInt(255),
+    Random().nextInt(255),
+    Random().nextInt(255),
+    0.4,
+  );
+
+  OneNote({super.key, required this.model}) {
+    mainPart = model.mainPart.toString();
+    headerPart = model.headerPart.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +32,7 @@ class OneNote extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: IconButton(
               onPressed: () {},
-              icon: Icon(Icons.delete),
+              icon: const Icon(Icons.delete),
               color: Colors.white60,
             ),
           ),
@@ -38,51 +47,57 @@ class OneNote extends StatelessWidget {
         ),
       ),
       body: Center(
-          child: Container(
-        color: col.withAlpha(40),
-        height: double.infinity,
-        width: 800,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            spacing: 20,
-            children: [
-              TextField(
+        child: Container(
+          color: col.withAlpha(40),
+          height: double.infinity,
+          width: 800,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              spacing: 20,
+              children: [
+                TextFormField(
+                  onChanged: (value) {
+                    headerPart = value;
+                  },
+                  initialValue: model.headerPart == null
+                      ? "Go Write!"
+                      : model.headerPart!,
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      label: Text(
-                        model.headerPart == null
-                            ? "Go Write!"
-                            : model.headerPart!,
-                        style: GoogleFonts.robotoSlab(),
-                      ))),
-              Expanded(
-                child: TextField(
+                    border: const OutlineInputBorder(),
+                    label: Text(
+                      "Header",
+                      style: GoogleFonts.robotoSlab(),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: TextFormField(
+                    onChanged: (value) {
+                      mainPart = value;
+                    },
                     maxLines: null,
                     expands: true,
                     textAlignVertical: TextAlignVertical.top,
+                    initialValue:
+                        model.mainPart == null ? "Go Write!" : model.mainPart!,
                     decoration: InputDecoration(
-                        alignLabelWithHint: true,
-                        floatingLabelAlignment: FloatingLabelAlignment.start,
-                        border: OutlineInputBorder(),
-                        label: Text(
-                          model.mainPart == null
-                              ? "Go Write!"
-                              : model.mainPart!,
-                          style: GoogleFonts.robotoSlab(),
-                        ))),
-              ),
-              FilledButton(onPressed: () {}, child: Text("Save"))
-            ],
+                      alignLabelWithHint: true,
+                      floatingLabelAlignment: FloatingLabelAlignment.start,
+                      border: const OutlineInputBorder(),
+                      label: Text(
+                        "Main",
+                        style: GoogleFonts.robotoSlab(),
+                      ),
+                    ),
+                  ),
+                ),
+                FilledButton(onPressed: () {}, child: const Text("Save")),
+              ],
+            ),
           ),
         ),
-      )),
+      ),
     );
-  }
-
-  void newData() async {
-    NoteList dto = NoteList();
-
-    await dto.init();
   }
 }
